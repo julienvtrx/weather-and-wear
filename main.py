@@ -2,6 +2,11 @@ import requests
 
 
 
+##########################################################################################
+#moduls to get data from the APIs
+##########################################################################################
+
+
 
 #gets the coordinates of the city so that the user only needs to type the name of the city he is interested in
 def get_coordinates(city):
@@ -17,7 +22,7 @@ def iso_lat_lon(data_coord):
         lon = data_coord["results"][0]["longitude"]
         return lat, lon  
     else:
-        print(f"city not found")
+        print("city not found")
         return None, None
 
 #gets the weather of the city with the lat and long it gets from lat_lon
@@ -26,6 +31,12 @@ def get_weather(latitude, longitude):
     response = requests.get(url)
     data_weather = response.json()
     return data_weather
+
+
+
+##########################################################################################
+#moduls that isolates the needed data that it gets from the APIs
+##########################################################################################
 
 
 
@@ -51,11 +62,43 @@ def iso_rain(data_weather):
         return rain  
 
 
-    
-#recommands what to wear based on the actual temp, wind and rain of the city
-def clothing_recommands(temp, wind, rain):
-    pass
 
+##########################################################################################
+#actual interesting moduls that you can change to your needs for example you want to wear a t-shirt starting at =>15 degrees celsius
+##########################################################################################
+
+
+
+#use of windchill function to get the felt temp
+def windchill(temp, wind):
+    if temp <= 10 and wind > 4.8:
+        #windchill function
+        effective_temp = 13.12 + (0.6215 * temp) - (11.37 * (wind ** 0.16)) + (0.3965 * temp * (wind ** 0.16))
+    else:
+        #over 10degrees celsius or over 4.8km/h windspeed, the windchill function has no purpose
+        effective_temp = temp
+    return effective_temp    
+
+
+#recommands what to wear based on the actual effective temp, wind of the city
+def clothing_recommands(effective_temp):
+    if effective_temp >= 18:
+        return "t-shirt weather"
+    
+    elif 15 <= effective_temp < 18:
+        return "light sweater (cotton/merino wool) over a t-shirt"
+    
+    elif 10 <= effective_temp < 15:
+        return "thick sweater (hoodie/fleece) + potentially a transitional jacket"
+
+    else:  # Unter 10 Grad
+        return "thick wool sweater in layers + warm winter jacket"
+
+
+
+##########################################################################################
+#main modul that combines the other moduls to actually be useful
+##########################################################################################
 
 
 
@@ -64,14 +107,12 @@ def main():
     city = input("name of the city: ")
 
 
-        #gets the data
+    #gets the data
     coord = get_coordinates(city)
     lat, lon = iso_lat_lon(coord)
     if lat is None: 
         return
     weather = get_weather(lat, lon)
-
-
 
 
     #isolates the data into what it needs
@@ -80,11 +121,22 @@ def main():
     #rain = iso_rain(weather)
 
 
-    #test
+    #uses the data for propositions
+    effective_temp = windchill(temp, wind)
+    recom = clothing_recommands(effective_temp)
+
+
+
+    #output to user
     print(f"\n--- weather in {city} ---")
     print(f"temp: {temp} °C")
+    print(f"effective temp: {effective_temp} °C")
     print(f"windspeed: {wind} km/h")
+    print(f"you should wear: {recom}")
 
 
+##########################################################################################
+#to import in another project
+##########################################################################################
 if __name__ == "__main__":
     main()
