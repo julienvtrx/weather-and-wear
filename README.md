@@ -6,7 +6,7 @@ command-line tool written in python that fetches live weather data for any city 
 
 **How it works**
 ---
-The tool runs entirely in the terminal and is built with a modular architecture to ensure that any user can easily and quickly changes or add functions that he/she wants:
+The tool runs entirely in the terminal and is built with a modular architecture to ensure that any user can easily and quickly change or add functions that they want:
 1. Takes a city name and converts it into latitude and longitude using the Open-Meteo Geocoding API[^1]
 2. Takes live temperature and wind speed from the Open-Meteo Forecast API[^1]
 3. Isolates the needed bit of the data that it works with
