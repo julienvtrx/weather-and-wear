@@ -30,17 +30,34 @@ The tool runs entirely in the terminal and is built with a modular architecture 
 
 
 
-**Installation**
+**Installation and Running**
 ---
 1. Clone the repo
 ```bash
 git clone https://github.com/julienvtrx/weather-and-wear.git
 cd weather-and-wear
 ```
-2. run the tool
+
+2. Create and activate venv (recommended)
+>Windows
+```bash
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+```
+>Linux/macOS
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+4. Run the tool
 ```bash
 python main.py
 ```
+
 
 
 
